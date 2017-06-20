@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:annotation-config />
+    <context:component-scan base-package="service.impl"/>
+
+    <import resource="memcachedContext.xml"/>
+    <import resource="spring-redis.xml" />
+    <import resource="server.xml" />
+
+    <context:property-placeholder location="classpath*:conf/*.properties"/>
+
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driver}"></property>
+        <property name="url" value="${jdbc.url}"></property>
+        <property name="username" value="${jdbc.username}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+        <property name="maxActive" value="10"></property>
+        <property name="maxIdle" value="5"></property>
+    </bean>
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <!--创建一个sql会话工厂bean，指定数据源 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <!--<property name="configLocation" value="classpath:mybatis-config.xml" />-->
+        <property name="mapperLocations" value="classpath:mapper/StudentMapper.xml" />
+        <property name="typeAliasesPackage" value="com.jn.bean" />
+    </bean>
+
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactory"/>
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="mapper" />
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+    </bean>
+
+    <!--封装第三方接口的工具类-->
+    <!--容联短信-->
+    <bean id="ccPclient" class="utils.CCPclient">
+        <property name="serverIP" value="${serverIP}" />
+        <property name="serverPort" value="${serverPort}" />
+        <property name="accountSid" value="${accountSid}" />
+        <property name="accountToken" value="${accountToken}" />
+        <property name="appId" value="${ccp_appId}" />
+    </bean>
+
+    <!-- 七牛对象存储 -->
+    <bean id="qiniuClient" class="utils.QiniuClientUtil" >
+        <property name="accessKey" value="${qiniu_accessKey}" />
+        <property name="secretKey" value="${qiniu_secretKey}" />
+        <property name="bucket" value="${qiniu_bucket}" />
+    </bean>
+
+    <!--腾讯cos-->
+    <bean id="cosClient" class="utils.COSclientUtil">
+        <property name="appId" value="${cos_appId}" />
+        <property name="secretId" value="${cos_secretId}" />
+        <property name="secretKey" value="${cos_secretKey}" />
+        <property name="bucketName" value="${cos_bucketName}" />
+        <property name="region" value="${cos_region}" />
+    </bean>
+</beans>

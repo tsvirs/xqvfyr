@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"  
+ xmlns:context="http://www.springframework.org/schema/context"  
+ xmlns:p="http://www.springframework.org/schema/p"  
+ xmlns:mvc="http://www.springframework.org/schema/mvc"  
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+ xsi:schemaLocation="http://www.springframework.org/schema/beans  
+      http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+      http://www.springframework.org/schema/context  
+      http://www.springframework.org/schema/context/spring-context-3.0.xsd 
+      http://www.springframework.org/schema/mvc  
+      http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd ">
+
+	<mvc:default-servlet-handler/>
+	<!-- 添加注解驱动 -->
+	<mvc:annotation-driven/>
+
+	<!-- 设置使用注解的类所在的jar包 -->
+	<context:component-scan base-package="com.jn.web" />
+	<!-- 配置直接转发的页面 -->
+	<mvc:view-controller path="/login.html" view-name="login" />
+
+
+
+	<!-- 静态资源访问 -->
+	<!-- 由于web.xml中配置spring只拦截.do的路径，所以无需配置静态资源访问  -->
+
+  	<!--<mvc:resources location="WEB-INF/js/" mapping="/js/**"/>-->
+ 	<!--<mvc:resources location="WEB-INF/images/" mapping="/imgs/**"/>-->
+ 	<!--<mvc:resources location="WEB-INF/css" mapping="/css/**"/>-->
+	 <!---->
+
+	<!-- 拦截器 -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<!-- 对/u/**的请求进行拦截 -->
+			<mvc:mapping path="/**/u/**"/>
+			<bean class="com.jn.web.interceptor.UserInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+	<!-- 附件上传 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="utf-8"/>
+		<property name="maxUploadSize" value="1048576000"/>
+		<property name="maxInMemorySize" value="40960"/>
+	</bean>
+	
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
+		<property name="prefix" value="/WEB-INF/jsp/views/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+
+	<bean id="tilesViewResolver" class="org.springframework.web.servlet.view.tiles3.TilesViewResolver" p:order="1"/>
+	<bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+		<property name="definitions">
+			<list>
+				<value>/WEB-INF/tiles/layout.xml</value>
+			</list>
+		</property>
+	</bean>
+
+ </beans>

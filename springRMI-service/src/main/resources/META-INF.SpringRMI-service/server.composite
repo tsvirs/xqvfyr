@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<composite
+        xmlns="http://www.osoa.org/xmlns/sca/1.0"
+        xmlns:tuscany="http://tuscany.apache.org/xmlns/sca/1.0"
+        targetNamespace="http://spgrmi"
+        xmlns:c="http://spgrmi"
+        name="calculator">
+
+
+    <component name="AddServiceComponent">
+        <implementation.java class="service.impl.Add" />
+        <!--<service name="Add" >-->
+            <!--<interface.java interface="service.IAdd" />-->
+            <!--<tuscany:binding.rmi port="8091" host="localhost" serviceName="AddRMIService" />-->
+        <!--</service>-->
+    </component>
+
+    <component name="FeatureServiceComponent" >
+        <implementation.java class="service.impl.JnshuFeatureServiceImpl" />
+
+        <!--<service name="JnshuFeatureServiceImpl">-->
+            <!--<interface.java interface="service.JnshuFeatureService" />-->
+            <!--<tuscany:binding.rmi port="8091" host="localhost" serviceName="FeatureRMIService" />-->
+        <!--</service>-->
+
+    </component>
+
+</composite>

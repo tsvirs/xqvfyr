@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+    
+    <definition name="tiles.base.definition" >
+        <put-attribute name="commonCss" value="/WEB-INF/jsp/views/commonCss.jsp" />
+        <put-attribute name="commonJs" value="/WEB-INF/jsp/views/commonJs.jsp" />
+    </definition>
+
+    <definition name="tiles.index.definition" extends="tiles.base.definition" template="/WEB-INF/jsp/template/templateT10.jsp"  >
+        <put-attribute name="commonNav" value="/WEB-INF/jsp/views/commonNav.jsp" />
+        <put-attribute name="item1" expression="/${item1}.jsp" />
+        <put-attribute name="item2" expression="/${item2}.jsp" />
+        <put-attribute name="commonFooter" value="/WEB-INF/jsp/views/commonFooter.jsp" />
+    </definition>
+
+</tiles-definitions>
